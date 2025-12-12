@@ -73,32 +73,21 @@ class Program
 
     static Contacts GetContactDetails()
     {
-        Console.Write("Enter First Name: ");
-        string firstName = Console.ReadLine();
+        var validator = new AddressBook_Management_System.Service.ValidateInput();
 
-        Console.Write("Enter Last Name: ");
-        string lastName = Console.ReadLine();
-
-        Console.Write("Enter Address: ");
-        string address = Console.ReadLine();
-
-        Console.Write("Enter City: ");
-        string city = Console.ReadLine();
-
-        Console.Write("Enter State: ");
-        string state = Console.ReadLine();
-
-        Console.Write("Enter Zip: ");
-        int zip = int.Parse(Console.ReadLine());
-
-        Console.Write("Enter Phone Number: ");
-        long phoneNumber = long.Parse(Console.ReadLine());
-
-        Console.Write("Enter Email: ");
-        string email = Console.ReadLine();
+        string firstName = validator.ValidateFirstName();
+        string lastName = validator.ValidateLastName();
+        string address = validator.ValidateAddress();
+        Console.WriteLine("Enter City");
+        string city=Console.ReadLine();
+        string state = validator.ValidateState();
+        int zip = validator.ValidateZip();
+        long phoneNumber = validator.ValidatePhoneNumber();
+        string email = validator.ValidateEmail();
 
         return new Contacts(firstName, lastName, address, city, state, zip, phoneNumber, email);
     }
+
 
     static (string firstName, string lastName) GetNameInput(string action)
     {

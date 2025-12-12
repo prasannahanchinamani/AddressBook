@@ -12,5 +12,6 @@ namespace AddressBook_Management_System.Service
         void AddContact(Contacts contact);
         void EditContact(string firstName, String lastName);
         void DeleteContact(string firstName, String lastName);
+        void DisplayContacts();
     }
 }
