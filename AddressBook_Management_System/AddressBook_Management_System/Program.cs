@@ -88,6 +88,7 @@ class Program
         return new Contacts(firstName, lastName, address, city, state, zip, phoneNumber, email);
     }
 
+    //tuple without class and out paratemeter give the output
 
     static (string firstName, string lastName) GetNameInput(string action)
     {
