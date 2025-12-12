@@ -10,5 +10,7 @@ namespace AddressBook_Management_System.Service
     internal interface IAddressBook
     {
         void AddContact(Contacts contact);
+        void EditContact(string firstName, String lastName);
+        void DeleteContact(string firstName, String lastName);
     }
 }
