@@ -94,5 +94,18 @@ namespace AddressBook_Management_System.Service
                 throw new ContactNotFoundException($"Contact {firstName} {lastName} not found.");
             }
         }
+
+        void IAddressBook.DisplayContacts()
+        {
+                if (contacts.Count == 0)
+                {
+                    Console.WriteLine("No contacts to display.");
+                    return;
+                }
+                foreach (Contacts contact in contacts.Values)
+                {
+                    Console.WriteLine(contact);
+                }
+        }
     }
 }
