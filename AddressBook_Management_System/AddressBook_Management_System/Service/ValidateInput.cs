@@ -41,7 +41,7 @@ namespace AddressBook_Management_System.Service
 
             public string ValidateAddress()
             {
-                string pattern = @"^[A-Za-z0-9.+*#][a-zA-Z0-9]{3,}$";
+                string pattern = @"^[A-Za-z0-9.+*#]{3,}$";
                 while (true)
                 {
                     Console.Write("Enter Address: ");

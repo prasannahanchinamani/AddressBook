@@ -15,13 +15,16 @@ class Program
 
         while (!exit)
         {
-            Console.WriteLine("\n1. Create Address Book");
+            Console.WriteLine("\n--- MAIN MENU ---");
+            Console.WriteLine("1. Create Address Book");
             Console.WriteLine("2. Select Address Book");
             Console.WriteLine("3. Display Address Books");
             Console.WriteLine("4. Search Person by City");
             Console.WriteLine("5. Search Person by State");
             Console.WriteLine("6. Count Persons by City and State");
-            Console.WriteLine("7. Exit");
+            Console.WriteLine("7. Save Address Book to CSV");
+            Console.WriteLine("8. Load Address Book from CSV");
+            Console.WriteLine("9. Exit");
             Console.Write("Choice: ");
 
             string choice = Console.ReadLine();
@@ -36,7 +39,8 @@ class Program
                 case "2":
                     Console.Write("Enter Address Book Name: ");
                     IAddressBook book = controller.SelectAddressBook(Console.ReadLine());
-                    ManageContacts(book);
+                    if (book != null)
+                        ManageContacts(book);
                     break;
 
                 case "3":
@@ -58,12 +62,22 @@ class Program
                     break;
 
                 case "7":
+                    Console.Write("Enter Address Book Name to SAVE: ");
+                    controller.SaveToCsv(Console.ReadLine());
+                    break;
+
+                case "8":
+                    Console.Write("Enter Address Book Name to LOAD: ");
+                    controller.LoadFromCsv(Console.ReadLine());
+                    break;
+
+                case "9":
                     exit = true;
                     Console.WriteLine("Exiting Address Book System...");
                     break;
 
                 default:
-                    Console.WriteLine("Invalid choice. Please try again.");
+                    Console.WriteLine("Invalid choice. Try again.");
                     break;
             }
         }
@@ -75,7 +89,8 @@ class Program
 
         while (!back)
         {
-            Console.WriteLine("\n1. Add Contact");
+            Console.WriteLine("\n--- CONTACT MENU ---");
+            Console.WriteLine("1. Add Contact");
             Console.WriteLine("2. Display Contacts");
             Console.WriteLine("3. Edit Contact");
             Console.WriteLine("4. Delete Contact");
@@ -121,6 +136,8 @@ class Program
             }
         }
     }
+
+
 
     static Contacts GetContactDetails()
     {

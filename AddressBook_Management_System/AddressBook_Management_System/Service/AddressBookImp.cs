@@ -111,5 +111,11 @@ namespace AddressBook_Management_System.Service
             return contacts.Values.ToList();
         }
 
+            public void ClearContacts()
+        {
+            contacts.Clear();
+        }
+
+
     }
 }
