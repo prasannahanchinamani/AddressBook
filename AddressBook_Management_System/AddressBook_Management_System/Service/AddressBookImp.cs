@@ -2,12 +2,13 @@
 using AddressBook_Management_System.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AddressBook_Management_System.Service
 {
-    public class AddressBookImp:IAddressBook
+    public class AddressBookImp : IAddressBook
     {
-        Dictionary<string, Contacts> contacts;
+        private Dictionary<string, Contacts> contacts;
 
         public AddressBookImp()
         {
@@ -16,96 +17,89 @@ namespace AddressBook_Management_System.Service
 
         private string GetKey(Contacts c)
         {
-
             return $"{c.FirstName.ToLower()}_{c.LastName.ToLower()}_{c.Email.ToLower()}";
         }
 
-        void IAddressBook.AddContact(Contacts contact)
+        public void AddContact(Contacts contact)
         {
-              string key = GetKey(contact);
+            string key = GetKey(contact);
+
             if (contacts.ContainsKey(key))
             {
                 Console.WriteLine("Contact already exists.");
+                return;
             }
-            else
-            {
-                contacts[key] = contact;
-                Console.WriteLine("Contact added successfully.");
-            }
+
+            contacts[key] = contact;
+            Console.WriteLine("Contact added successfully.");
         }
 
-        void IAddressBook.EditContact(string firstName, string lastName)
+        public void EditContact(string firstName, string lastName)
         {
-            var keyMatch = contacts
-               .Where(kvp => kvp.Value.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase) &&
-                             kvp.Value.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase))
-               .Select(kvp => kvp.Key)
-               .FirstOrDefault();
+            string keyMatch = contacts
+                .Where(kvp =>
+                    kvp.Value.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase) &&
+                    kvp.Value.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase))
+                .Select(kvp => kvp.Key)
+                .FirstOrDefault();
 
-            if (keyMatch != null)
-            {
-                Contacts editcontact = contacts[keyMatch];
-                ValidateInput validator = new ValidateInput();
-
-                Console.WriteLine("Do you want to edit name (y/n)?");
-                string choice = Console.ReadLine();
-                if (choice.ToLower() == "y")
-                {
-                    editcontact.FirstName = validator.ValidateFirstName();
-                    editcontact.LastName = validator.ValidateLastName();
-                }
-
-                editcontact.Address = validator.ValidateAddress();
-                Console.Write("Enter City: ");
-                editcontact.City = Console.ReadLine();
-                editcontact.State = validator.ValidateState();
-                editcontact.Zip = validator.ValidateZip();
-                editcontact.PhoneNumber = validator.ValidatePhoneNumber();
-                editcontact.Email = validator.ValidateEmail();
-
-                contacts.Remove(keyMatch);
-                string newKey = GetKey(editcontact);
-                contacts[newKey] = editcontact;
-
-                Console.WriteLine("Contact updated successfully.");
-            }
-            else
-            {
+            if (keyMatch == null)
                 throw new ContactNotFoundException($"Contact {firstName} {lastName} not found.");
+
+            Contacts editContact = contacts[keyMatch];
+            ValidateInput validator = new ValidateInput();
+
+            Console.WriteLine("Do you want to edit name (y/n)?");
+            string choice = Console.ReadLine();
+
+            if (choice.ToLower() == "y")
+            {
+                editContact.FirstName = validator.ValidateFirstName();
+                editContact.LastName = validator.ValidateLastName();
             }
 
+            editContact.Address = validator.ValidateAddress();
+            Console.Write("Enter City: ");
+            editContact.City = Console.ReadLine();
+            editContact.State = validator.ValidateState();
+            editContact.Zip = validator.ValidateZip();
+            editContact.PhoneNumber = validator.ValidatePhoneNumber();
+            editContact.Email = validator.ValidateEmail();
+
+            contacts.Remove(keyMatch);
+            contacts[GetKey(editContact)] = editContact;
+
+            Console.WriteLine("Contact updated successfully.");
         }
 
-        void IAddressBook.DeleteContact(string firstName, string lastName)
+        public void DeleteContact(string firstName, string lastName)
         {
-            var keyMatch = contacts
-                  .Where(kvp => kvp.Value.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase) &&
-                                kvp.Value.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase))
-                  .Select(kvp => kvp.Key)
-                  .FirstOrDefault();
+            string keyMatch = contacts
+                .Where(kvp =>
+                    kvp.Value.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase) &&
+                    kvp.Value.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase))
+                .Select(kvp => kvp.Key)
+                .FirstOrDefault();
 
-            if (keyMatch != null)
-            {
-                contacts.Remove(keyMatch);
-                Console.WriteLine($"Contact {firstName} {lastName} deleted successfully.");
-            }
-            else
-            {
+            if (keyMatch == null)
                 throw new ContactNotFoundException($"Contact {firstName} {lastName} not found.");
-            }
+
+            contacts.Remove(keyMatch);
+            Console.WriteLine($"Contact {firstName} {lastName} deleted successfully.");
         }
 
-        void IAddressBook.DisplayContacts()
+        public void DisplayContacts()
         {
-                if (contacts.Count == 0)
-                {
-                    Console.WriteLine("No contacts to display.");
-                    return;
-                }
-                foreach (Contacts contact in contacts.Values)
-                {
-                    Console.WriteLine(contact);
-                }
+            if (contacts.Count == 0)
+            {
+                Console.WriteLine("No contacts to display.");
+                return;
+            }
+
+            foreach (Contacts contact in contacts.Values)
+            {
+                Console.WriteLine(contact);
+            }
         }
     }
 }

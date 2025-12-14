@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AddressBook_Management_System.Service
 {
-    internal interface IAddressBook
+   public interface IAddressBook
     {
         void AddContact(Contacts contact);
         void EditContact(string firstName, String lastName);

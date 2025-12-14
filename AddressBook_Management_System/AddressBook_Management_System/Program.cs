@@ -1,19 +1,65 @@
-﻿using AddressBook_Management_System.Exceptions;
+﻿using System;
 using AddressBook_Management_System.Model;
 using AddressBook_Management_System.Service;
+using AddressBook_Management_System.Exceptions;
+using AddressBook_Management_System.Controller;
 
 class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Welcome to Address Book");
+        Console.WriteLine("Welcome to Address Book System");
 
-        IAddressBook addressBook = new AddressBookImp();
+        AddressBookController controller = new AddressBookController();
         bool exit = false;
 
         while (!exit)
         {
-            ShowMenu();
+            Console.WriteLine("\n1. Create Address Book");
+            Console.WriteLine("2. Select Address Book");
+            Console.WriteLine("3. Display Address Books");
+            Console.WriteLine("4. Exit");
+            Console.Write("Choice: ");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    Console.Write("Enter Address Book Name: ");
+                    controller.CreateAddressBook(Console.ReadLine());
+                    break;
+
+                case "2":
+                    Console.Write("Enter Address Book Name: ");
+                    IAddressBook book = controller.SelectAddressBook(Console.ReadLine());
+                    ManageContacts(book);
+                    break;
+
+                case "3":
+                    controller.ShowAddressBooks();
+                    break;
+
+                case "4":
+                    exit = true;
+                    break;
+            }
+        }
+    }
+
+    static void ManageContacts(IAddressBook addressBook)
+    {
+        bool back = false;
+
+        while (!back)
+        {
+            Console.WriteLine("\n1. Add Contact");
+            Console.WriteLine("2. Display Contacts");
+            Console.WriteLine("3. Edit Contact");
+            Console.WriteLine("4. Delete Contact");
+            Console.WriteLine("5. Back");
+            Console.Write("Choice: ");
+
             string choice = Console.ReadLine();
 
             try
@@ -21,8 +67,7 @@ class Program
                 switch (choice)
                 {
                     case "1":
-                        Contacts newContact = GetContactDetails();
-                        addressBook.AddContact(newContact);
+                        addressBook.AddContact(GetContactDetails());
                         break;
 
                     case "2":
@@ -30,74 +75,54 @@ class Program
                         break;
 
                     case "3":
-                        var (editFirst, editLast) = GetNameInput("edit");
-                        addressBook.EditContact(editFirst, editLast);
+                        (string ef, string el) = GetNameInput("edit");
+                        addressBook.EditContact(ef, el);
                         break;
 
                     case "4":
-                        var (delFirst, delLast) = GetNameInput("delete");
-                        addressBook.DeleteContact(delFirst, delLast);
+                        (string df, string dl) = GetNameInput("delete");
+                        addressBook.DeleteContact(df, dl);
                         break;
 
                     case "5":
-                        exit = true;
-                        Console.WriteLine("Exiting Address Book. Thank You!");
-                        break;
-
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
+                        back = true;
                         break;
                 }
             }
             catch (ContactNotFoundException ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Unexpected error: {ex.Message}");
+                Console.WriteLine(ex.Message);
             }
         }
     }
 
-    static void ShowMenu()
-    {
-        Console.WriteLine("\nChoose an option:");
-        Console.WriteLine("1. Add Contact");
-        Console.WriteLine("2. Display Contacts");
-        Console.WriteLine("3. Edit Contact");
-        Console.WriteLine("4. Delete Contact");
-        Console.WriteLine("5. Exit");
-        Console.Write("Enter choice: ");
-    }
-
     static Contacts GetContactDetails()
     {
-        var validator = new AddressBook_Management_System.Service.ValidateInput();
+        ValidateInput v = new ValidateInput();
 
-        string firstName = validator.ValidateFirstName();
-        string lastName = validator.ValidateLastName();
-        string address = validator.ValidateAddress();
-        Console.WriteLine("Enter City");
-        string city=Console.ReadLine();
-        string state = validator.ValidateState();
-        int zip = validator.ValidateZip();
-        long phoneNumber = validator.ValidatePhoneNumber();
-        string email = validator.ValidateEmail();
+        string f = v.ValidateFirstName();
+        string l = v.ValidateLastName();
+        string a = v.ValidateAddress();
 
-        return new Contacts(firstName, lastName, address, city, state, zip, phoneNumber, email);
+        Console.Write("Enter City: ");
+        string c = Console.ReadLine();
+
+        string s = v.ValidateState();
+        int z = v.ValidateZip();
+        long p = v.ValidatePhoneNumber();
+        string e = v.ValidateEmail();
+
+        return new Contacts(f, l, a, c, s, z, p, e);
     }
 
-    //tuple without class and out paratemeter give the output
-
-    static (string firstName, string lastName) GetNameInput(string action)
+    static (string, string) GetNameInput(string action)
     {
-        Console.Write($"Enter First Name of contact to {action}: ");
-        string firstName = Console.ReadLine();
+        Console.Write("Enter First Name to " + action + ": ");
+        string f = Console.ReadLine();
 
-        Console.Write($"Enter Last Name of contact to {action}: ");
-        string lastName = Console.ReadLine();
+        Console.Write("Enter Last Name to " + action + ": ");
+        string l = Console.ReadLine();
 
-        return (firstName, lastName);
+        return (f, l);
     }
 }

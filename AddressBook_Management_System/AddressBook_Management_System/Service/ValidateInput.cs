@@ -41,7 +41,7 @@ namespace AddressBook_Management_System.Service
 
             public string ValidateAddress()
             {
-                string pattern = @"^[A-Za-z][a-zA-Z0-9]{4,}$";
+                string pattern = @"^[A-Za-z0-9.+*#][a-zA-Z0-9]{3,}$";
                 while (true)
                 {
                     Console.Write("Enter Address: ");
@@ -50,7 +50,7 @@ namespace AddressBook_Management_System.Service
                     if (Regex.IsMatch(addressV, pattern))
                         return addressV;
                     else
-                        Console.WriteLine("Invalid Address. Must be at least 4 characters.");
+                        Console.WriteLine("Invalid Address. Must be at least 3 characters.");
                 }
             }
 
