@@ -19,20 +19,25 @@ namespace AddressBook_Management_System.Service
         {
             return $"{c.FirstName.ToLower()}_{c.LastName.ToLower()}_{c.Email.ToLower()}";
         }
-
         public void AddContact(Contacts contact)
         {
-            string key = GetKey(contact);
+            bool isDuplicate = contacts.Values.Any(c => c.Equals(contact));
 
-            if (contacts.ContainsKey(key))
+            if (isDuplicate)
             {
-                Console.WriteLine("Contact already exists.");
+                Console.WriteLine("Duplicate contact found. Contact not added.");
                 return;
             }
+            
 
+            string key = GetKey(contact);
             contacts[key] = contact;
+            List<Contacts> sorted = contacts.Values.ToList();
+            sorted.Sort();
             Console.WriteLine("Contact added successfully.");
         }
+
+
 
         public void EditContact(string firstName, string lastName)
         {
@@ -101,5 +106,10 @@ namespace AddressBook_Management_System.Service
                 Console.WriteLine(contact);
             }
         }
+        public List<Contacts> GetAllContacts()
+        {
+            return contacts.Values.ToList();
+        }
+
     }
 }

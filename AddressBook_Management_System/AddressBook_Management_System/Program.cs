@@ -18,7 +18,10 @@ class Program
             Console.WriteLine("\n1. Create Address Book");
             Console.WriteLine("2. Select Address Book");
             Console.WriteLine("3. Display Address Books");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine("4. Search Person by City");
+            Console.WriteLine("5. Search Person by State");
+            Console.WriteLine("6. Count Persons by City and State");
+            Console.WriteLine("7. Exit");
             Console.Write("Choice: ");
 
             string choice = Console.ReadLine();
@@ -41,7 +44,26 @@ class Program
                     break;
 
                 case "4":
+                    Console.Write("Enter City: ");
+                    controller.SearchByCity(Console.ReadLine());
+                    break;
+
+                case "5":
+                    Console.Write("Enter State: ");
+                    controller.SearchByState(Console.ReadLine());
+                    break;
+
+                case "6":
+                    controller.CountByCityOrState();
+                    break;
+
+                case "7":
                     exit = true;
+                    Console.WriteLine("Exiting Address Book System...");
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
                     break;
             }
         }
@@ -87,6 +109,10 @@ class Program
                     case "5":
                         back = true;
                         break;
+
+                    default:
+                        Console.WriteLine("Invalid choice.");
+                        break;
                 }
             }
             catch (ContactNotFoundException ex)
@@ -100,29 +126,29 @@ class Program
     {
         ValidateInput v = new ValidateInput();
 
-        string f = v.ValidateFirstName();
-        string l = v.ValidateLastName();
-        string a = v.ValidateAddress();
+        string firstName = v.ValidateFirstName();
+        string lastName = v.ValidateLastName();
+        string address = v.ValidateAddress();
 
         Console.Write("Enter City: ");
-        string c = Console.ReadLine();
+        string city = Console.ReadLine();
 
-        string s = v.ValidateState();
-        int z = v.ValidateZip();
-        long p = v.ValidatePhoneNumber();
-        string e = v.ValidateEmail();
+        string state = v.ValidateState();
+        int zip = v.ValidateZip();
+        long phone = v.ValidatePhoneNumber();
+        string email = v.ValidateEmail();
 
-        return new Contacts(f, l, a, c, s, z, p, e);
+        return new Contacts(firstName, lastName, address, city, state, zip, phone, email);
     }
 
     static (string, string) GetNameInput(string action)
     {
         Console.Write("Enter First Name to " + action + ": ");
-        string f = Console.ReadLine();
+        string firstName = Console.ReadLine();
 
         Console.Write("Enter Last Name to " + action + ": ");
-        string l = Console.ReadLine();
+        string lastName = Console.ReadLine();
 
-        return (f, l);
+        return (firstName, lastName);
     }
 }

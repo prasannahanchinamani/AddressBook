@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AddressBook_Management_System.Model
 {
-    public class Contacts
+    public class Contacts:IComparable<Contacts>
     {
         // Private fields
         private string firstName;
@@ -80,6 +80,21 @@ namespace AddressBook_Management_System.Model
             this.phoneNumber = phoneNumber;
             this.email = email;
         }
+        public override bool Equals(object obj)
+{
+    if (obj == null || !(obj is Contacts))
+        return false;
+
+    Contacts other = (Contacts)obj;
+
+    return this.FirstName.Equals(other.FirstName, StringComparison.OrdinalIgnoreCase)
+        && this.LastName.Equals(other.LastName, StringComparison.OrdinalIgnoreCase);
+}
+
+public override int GetHashCode()
+{
+    return (FirstName + LastName).ToLower().GetHashCode();
+}
 
 
         public override string ToString()
@@ -89,7 +104,30 @@ namespace AddressBook_Management_System.Model
                    $"Phone: {PhoneNumber}\n" +
                    $"Email: {Email}";
         }
+
+
+        public int CompareTo(Contacts other)
+        {
+            if (other == null) return 1;
+
+            //  First Name
+            int result = this.FirstName.CompareTo(other.FirstName);
+            if (result != 0) return result;
+
+            //Last Name
+            result = this.LastName.CompareTo(other.LastName);
+            if (result != 0) return result;
+
+            //  Sort by State
+            result = this.State.CompareTo(other.State);
+            if (result != 0) return result;
+
+            // Sort by Zip
+            return this.Zip.CompareTo(other.Zip);
+        }
+
     }
 }
+
 
 

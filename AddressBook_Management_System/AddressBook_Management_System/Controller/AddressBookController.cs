@@ -25,5 +25,20 @@ namespace AddressBook_Management_System.Controller
         {
             system.DisplayAddressBooks();
         }
+        public void SearchByCity(string city)
+        {
+            system.SearchByCity(city);
+        }
+
+        public void SearchByState(string state)
+        {
+            system.SearchByState(state);
+        }
+        public void CountByCityOrState()
+        {
+            system.CountByCityOrState();
+        }
+
+
     }
 }
