@@ -1,6 +1,7 @@
-﻿using System;
-using AddressBook_Management_System.Service;
+﻿using AddressBook_Management_System.Service;
+using AddressBook_Management_System.Service.DATABASE;
 using AddressBook_Management_System.Service.Fileio;
+using System;
 
 namespace AddressBook_Management_System.Controller
 {
@@ -8,12 +9,16 @@ namespace AddressBook_Management_System.Controller
     {
         private AddressBookSystem system;
         private PersonCSVWrite csv;
+        private AddressBookDbService db;
 
         public AddressBookController()
         {
             system = new AddressBookSystem();
             csv = new PersonCSVWrite();
+            db = new AddressBookDbService();
         }
+
+   
 
         public void CreateAddressBook(string name)
         {
@@ -37,6 +42,7 @@ namespace AddressBook_Management_System.Controller
         {
             system.DisplayAddressBooks();
         }
+
 
         public void SaveToCsv(string addressBookName)
         {
@@ -63,6 +69,38 @@ namespace AddressBook_Management_System.Controller
                 Console.WriteLine(ex.Message);
             }
         }
+
+   
+
+        public void SaveToDatabase(string addressBookName)
+        {
+            try
+            {
+                IAddressBook book = system.GetAddressBook(addressBookName);
+                db.SaveAddressBook(addressBookName, book);
+                Console.WriteLine("Address Book saved to Database.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void LoadFromDatabase(string addressBookName)
+        {
+            try
+            {
+                IAddressBook book = system.GetAddressBook(addressBookName);
+                db.LoadAddressBook(addressBookName, book);
+                Console.WriteLine("Address Book loaded from Database.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+  
 
         public void SearchByCity(string city)
         {

@@ -24,7 +24,9 @@ class Program
             Console.WriteLine("6. Count Persons by City and State");
             Console.WriteLine("7. Save Address Book to CSV");
             Console.WriteLine("8. Load Address Book from CSV");
-            Console.WriteLine("9. Exit");
+            Console.WriteLine("9. Save Address Book to Database");
+            Console.WriteLine("10. Load Address Book from Database");
+            Console.WriteLine("11. Exit");
             Console.Write("Choice: ");
 
             string choice = Console.ReadLine();
@@ -62,16 +64,26 @@ class Program
                     break;
 
                 case "7":
-                    Console.Write("Enter Address Book Name to SAVE: ");
+                    Console.Write("Enter Address Book Name to SAVE (CSV): ");
                     controller.SaveToCsv(Console.ReadLine());
                     break;
 
                 case "8":
-                    Console.Write("Enter Address Book Name to LOAD: ");
+                    Console.Write("Enter Address Book Name to LOAD (CSV): ");
                     controller.LoadFromCsv(Console.ReadLine());
                     break;
 
                 case "9":
+                    Console.Write("Enter Address Book Name to SAVE (DB): ");
+                    controller.SaveToDatabase(Console.ReadLine());
+                    break;
+
+                case "10":
+                    Console.Write("Enter Address Book Name to LOAD (DB): ");
+                    controller.LoadFromDatabase(Console.ReadLine());
+                    break;
+
+                case "11":
                     exit = true;
                     Console.WriteLine("Exiting Address Book System...");
                     break;
@@ -82,6 +94,8 @@ class Program
             }
         }
     }
+
+    // ---------------- CONTACT MENU ----------------
 
     static void ManageContacts(IAddressBook addressBook)
     {
@@ -136,7 +150,6 @@ class Program
             }
         }
     }
-
 
 
     static Contacts GetContactDetails()
